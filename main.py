@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 import schemas
-from models.report_it_models import *
 from databases.report_it_database import engine, SessionLocal
+from models.report_it_models import *
 
 app = FastAPI()
 
@@ -16,7 +16,6 @@ def get_db():
     finally:
         db.close()
 
-
 @app.post("/create_user")
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     new_user = UserModel(username=user.username, password=user.password)
@@ -25,4 +24,28 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return user
 
+@app.get("/retrieve_users")
+def retrieve_all_users(db: Session = Depends(get_db)):
+    users = db.query(UserModel).all()
+    return users
 
+
+@app.get("/retrieve_user/{id}")
+def retrieve_user(id, db: Session = Depends(get_db)):
+    user = db.query(UserModel).filter(UserModel.id == id).first()
+    return user
+
+@app.delete("/delete_user/{id}")
+def delete_user(id, db: Session = Depends(get_db)):
+    db.query(UserModel).filter(UserModel.id == id).delete(synchronize_session=False)
+    db.commit()
+    return {"isSuccess": True}
+
+@app.put("/update_user/{id}")
+def update_user(id, request_user: schemas.UserCreate, db: Session = Depends(get_db)):
+    user = db.query(UserModel).filter(UserModel.id == id)
+    if not user.first():
+        return {"isSuccess": False}
+    user.update(request_user.model_dump())
+    db.commit()
+    return {"isSuccess": True}
