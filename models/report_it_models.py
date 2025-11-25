@@ -22,6 +22,7 @@ class CommunityProblemModel(Base):
     municipal_id = Column(Integer, ForeignKey('municipality.municipal_id'))
     location_id = Column(Integer, ForeignKey('location.location_id'))
     description = Column(String)
+    image = Column(String)
     date = Column(DateTime)
     status = Column(Enum(Status), default=Status.PENDING)
 

@@ -1,51 +1,18 @@
 from fastapi import FastAPI
-from fastapi.params import Depends
-from sqlalchemy.orm import Session
-import schemas
-from databases.report_it_database import engine, SessionLocal
+
+from controllers.community_problem_controller import router as community_problem_router
+from controllers.location_controller import router as location_router
+from controllers.municipality_controller import router as municipality_router
+from controllers.user_controller import router as user_router
+from databases.report_it_database import engine
 from models.report_it_models import *
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@app.post("/create_user")
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    new_user = UserModel(username=user.username, password=user.password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return user
-
-@app.get("/retrieve_users")
-def retrieve_all_users(db: Session = Depends(get_db)):
-    users = db.query(UserModel).all()
-    return users
-
-
-@app.get("/retrieve_user/{id}")
-def retrieve_user(id, db: Session = Depends(get_db)):
-    user = db.query(UserModel).filter(UserModel.id == id).first()
-    return user
-
-@app.delete("/delete_user/{id}")
-def delete_user(id, db: Session = Depends(get_db)):
-    db.query(UserModel).filter(UserModel.id == id).delete(synchronize_session=False)
-    db.commit()
-    return {"isSuccess": True}
-
-@app.put("/update_user/{id}")
-def update_user(id, request_user: schemas.UserCreate, db: Session = Depends(get_db)):
-    user = db.query(UserModel).filter(UserModel.id == id)
-    if not user.first():
-        return {"isSuccess": False}
-    user.update(request_user.model_dump())
-    db.commit()
-    return {"isSuccess": True}
+#--------------------------- API Routers ---------------------------#
+app.include_router(user_router, prefix="/users", tags=["Users"])
+app.include_router(community_problem_router, prefix="/community_problems", tags=["Community Problems"])
+app.include_router(municipality_router, prefix="/municipalities", tags=["Municipalities"])
+app.include_router(location_router, prefix="/locations", tags=["Locations"])

@@ -11,6 +11,7 @@ class CommunityProblemCreate(BaseModel):
     municipal_id: int
     location_id: int
     description: str
+    image: str
     date: datetime
     status: Status
 
