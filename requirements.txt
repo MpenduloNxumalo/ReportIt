@@ -1,4 +1,5 @@
-fastapi
-sqlalchemy
+fastapi~=0.120.1
+sqlalchemy~=2.0.44
 uvicorn
-pydantic
+pydantic~=2.12.3
+firebase_admin~=7.1.0

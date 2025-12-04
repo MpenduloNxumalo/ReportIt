@@ -1,0 +1,82 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# -----------------------------
+# FastAPI / Uvicorn
+# -----------------------------
+*.log
+*.sqlite3
+
+# -----------------------------
+# Environment Variables
+# -----------------------------
+.env
+*.env
+run_api.bat
+deploy_api.bat
+
+
+# Firestore service account key
+service_key.json
+firebase-key.json
+google-credentials.json
+
+# -----------------------------
+# IDE / OS Files
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# Docker
+# -----------------------------
+# Ignore local build output
+docker-compose.override.yml
+docker-data/
+*.tar
+# Exclude files not needed in Docker context
+.dockerignore
+
+# -----------------------------
+# Pytest / Coverage
+# -----------------------------
+.coverage
+htmlcov/
+.cache/
+pytest_cache/
+
+# -----------------------------
+# Bytecode / Caches
+# -----------------------------
+__pycache__/
+.cache/
+.mypy_cache/
+.pytest_cache/
+.pyre/
+.pytype/
+
+# -----------------------------
+# Reports / Generated Files
+# -----------------------------
+*.log
+*.out
+*.pid
